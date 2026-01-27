@@ -31,8 +31,8 @@ def add_message(
 
     message = add_message_for_ticket(
         ticket_id=ticket_id,
+        content=content,
         user_id=str(current_user["_id"]),
-        content=content
     )
 
     return {

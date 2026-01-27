@@ -10,16 +10,19 @@ def detect_intent(text: str):
 
     text = text.lower()
 
-    if any(word in text for word in ["refund", "money", "charged", "payment"]):
-        return "billing_issue"
+    if any(word in text for word in ["refund", "money back", "charged", "payment"]):
+        return "refund"
 
-    if any(word in text for word in ["error", "crash", "bug", "issue"]):
-        return "technical_issue"
+    if any(word in text for word in ["error", "crash", "bug", "not working"]):
+        return "complaint"
 
-    if any(word in text for word in ["thank", "love", "great"]):
-        return "positive_feedback"
+    if any(word in text for word in ["how", "what", "can i", "help", "tell me", "which", "when", "where", "why"]):
+        return "query"
 
-    return "general_query"
+    if any(word in text for word in ["thank", "love", "great", "awesome"]):
+        return "feedback"
+
+    return "query"
 
 
 """

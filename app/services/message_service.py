@@ -2,11 +2,12 @@ from datetime import datetime
 from bson import ObjectId
 from app.services.ai_service import analyze_message
 from app.services.db_collections import messages_collection
+from app.tasks.ai_tasks import process_message_ai
 
 def add_message_for_ticket(
     ticket_id: str,
-    user_id: str,
-    content: str
+    content: str,
+    user_id: str
 ):
 
     """
@@ -20,17 +21,18 @@ def add_message_for_ticket(
         "ticket_id": ObjectId(ticket_id),
         "user_id": ObjectId(user_id),
         "content": content,
-        "created_at": datetime.utcnow()
+        "created_at": datetime.utcnow(),
+        "intent": None
     }
 
 
     result = messages_collection.insert_one(message)
     message["_id"] = result.inserted_id
 
-    analyze_message(
-        message_id=str(message["_id"]),
-        content=content,
-        ticket_id=ticket_id
+    process_message_ai.delay(
+        str(message["_id"]),
+        content,
+        ticket_id
     )
 
     return message

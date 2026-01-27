@@ -1,4 +1,4 @@
-def decide_priority(sentiment: str, sentiment_score: float, intent: str):
+'''def decide_priority(sentiment: str, sentiment_score: float, intent: str):
     """
     Decide ticket priority based on AI signals.
 
@@ -24,7 +24,7 @@ def decide_priority(sentiment: str, sentiment_score: float, intent: str):
 
     return "medium"
 
-
+'''
 
 # 📌 Learning:
 # Rules are business-owned, not AI-owned
