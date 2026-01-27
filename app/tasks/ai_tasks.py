@@ -9,7 +9,14 @@ Why wrapper?
 - Celery should not touch HTTP or DB routing
 """
 
-@celery_app.task(bind=True, autoretry_for=(Exception,), retry_backoff=5, retry_kwargs={"max_retries": 3})
+@celery_app.task(
+    bind=True,
+    autoretry_for=(Exception,),
+    retry_backoff=5,
+    retry_kwargs={"max_retries": 3}
+)
+
+
 def process_message_ai(self, message_id: str, content: str, ticket_id: str):
     """
     Background AI processing task.

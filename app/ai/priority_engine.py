@@ -27,6 +27,3 @@ def decide_priority(sentiment: str, sentiment_score: float, intent: str):
                 continue
 
         return rule["priority"]
-
-    # Default fallback
-    return "medium"
