@@ -4,11 +4,14 @@ from bson import ObjectId
 from app.ai.sentiment import analyze_sentiment
 from app.ai.intent import detect_intent
 from app.ai.priority_engine import decide_priority
+from app.core.logger import get_logger
 from app.services.db_collections import (
     ai_results_collection,
     tickets_collection,
     messages_collection,
 )
+
+logger = get_logger(__name__)
 
 def analyze_message(message_id: str, content: str, ticket_id: str):
     """
@@ -24,12 +27,35 @@ def analyze_message(message_id: str, content: str, ticket_id: str):
     sentiment = analyze_sentiment(content)
     intent = detect_intent(content)
 
+    if not intent:
+        intent = "general"
+
     # 2. Decide priority using rule engine
     priority = decide_priority(
         sentiment=sentiment["label"],
         sentiment_score=sentiment["score"],
         intent=intent
     )
+
+    if not priority:
+        priority = "medium"
+
+    # Explain WHY this priority was chosen (AI explainability)
+    decision_reason = {
+        "sentiment": {
+            "label": sentiment["label"],
+            "score": sentiment["score"]
+        },
+        "intent": intent,
+        "priority": priority,
+        "explanation": (
+            f"Sentiment '{sentiment['label']}' "
+            f"with score {sentiment['score']} "
+            f"and intent '{intent}' "
+            f"resulted in priority '{priority}'"
+        )
+}
+
 
     # 3. Store AI result
     ai_result = {
@@ -39,6 +65,7 @@ def analyze_message(message_id: str, content: str, ticket_id: str):
         "sentiment_score": sentiment["score"],
         "intent": intent,
         "suggested_priority": priority,
+        "decision_reason": decision_reason,
         "processed_at": datetime.utcnow()
     }
 
@@ -60,4 +87,8 @@ def analyze_message(message_id: str, content: str, ticket_id: str):
                 "updated_at": datetime.utcnow()
             }
         }
+    )
+
+    logger.info(
+        f"AI decision | ticket={ticket_id} | {decision_reason['explanation']}"
     )

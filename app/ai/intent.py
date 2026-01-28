@@ -1,31 +1,17 @@
-def detect_intent(text: str):
-    """
-    Detect intent using simple rule-based logic.
-
-    Why rule-based?
-    - Transparent
-    - Explainable
-    - Easy to evolve
-    """
-
+def detect_intent(text: str) -> str:
     text = text.lower()
 
-    if any(word in text for word in ["refund", "money back", "charged", "payment"]):
+    if any(word in text for word in ["refund", "money back", "return"]):
         return "refund"
 
-    if any(word in text for word in ["error", "crash", "bug", "not working"]):
+    if any(word in text for word in ["complaint", "bad", "worst", "angry"]):
         return "complaint"
 
-    if any(word in text for word in ["how", "what", "can i", "help", "tell me", "which", "when", "where", "why"]):
+    if any(word in text for word in ["how", "what", "why", "help"]):
         return "query"
 
-    if any(word in text for word in ["thank", "love", "great", "awesome"]):
+    if any(word in text for word in ["thanks", "great", "good", "awesome"]):
         return "feedback"
 
-    return "query"
-
-
-"""
-- Intent is about reason, not emotion
-- Simple logic beats opaque ML early
-"""
+    # 🔥 GUARANTEED FALLBACK
+    return "general"

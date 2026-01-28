@@ -32,5 +32,11 @@ PRIORITY_RULES = [
         "conditions": {
             "intents": ["feedback"]
         }
+    },
+    {
+        "priority": "medium",
+        "conditions": {
+            "intents": ["general"]
+        }
     }
 ]

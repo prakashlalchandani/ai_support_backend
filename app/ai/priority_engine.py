@@ -26,4 +26,4 @@ def decide_priority(sentiment: str, sentiment_score: float, intent: str):
             if intent not in conditions["intents"]:
                 continue
 
-        return rule["priority"]
+        return "medium"

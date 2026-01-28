@@ -2,7 +2,10 @@ from fastapi import APIRouter, Depends, HTTPException
 from app.core.dependencies import get_current_user
 from app.services.message_service import add_message_for_ticket
 from app.services.db_collections import tickets_collection
+from app.core.logger import get_logger
 from bson import ObjectId
+
+logger = get_logger(__name__)
 
 router = APIRouter(prefix="/messages", tags=["Messages"])
 
@@ -33,6 +36,10 @@ def add_message(
         ticket_id=ticket_id,
         content=content,
         user_id=str(current_user["_id"]),
+    )
+
+    logger.info(
+    f"User {current_user['_id']} added message to ticket {ticket_id}"
     )
 
     return {
