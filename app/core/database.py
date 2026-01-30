@@ -6,15 +6,15 @@ import os
 load_dotenv()
 
 # read values from .env
-MONGO_URL = os.getenv("MONGO_URL")
+MONGO_URI = os.getenv("MONGO_URI")
 DATABASE_NAME = os.getenv("DATABASE_NAME")
 
 
-if not MONGO_URL or not DATABASE_NAME:
+if not MONGO_URI or not DATABASE_NAME:
     raise ValueError("MONGO_URI OR DATABASE_NAME not set in .env file")
 
 # create mongodb client
-client = MongoClient(MONGO_URL)
+client = MongoClient(MONGO_URI)
 
 # get database
 db = client[DATABASE_NAME]

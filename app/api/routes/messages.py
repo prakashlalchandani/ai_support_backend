@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
+from app.core.limiter import limiter
 from app.core.dependencies import get_current_user
 from app.services.message_service import add_message_for_ticket
 from app.services.db_collections import tickets_collection
@@ -10,6 +11,7 @@ logger = get_logger(__name__)
 router = APIRouter(prefix="/messages", tags=["Messages"])
 
 @router.post("/{ticket_id}")
+@limiter.limit("/")
 def add_message(
     ticket_id: str,
     content: str,
