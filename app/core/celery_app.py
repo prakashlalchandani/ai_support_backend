@@ -1,4 +1,5 @@
 from celery import Celery
+from app.core.config import settings
 
 """
 Celery app configuration.
@@ -10,8 +11,8 @@ Why separate file?
 
 celery_app = Celery(
     "ai_support_backend",
-    broker="redis://localhost:6379/0",
-    backend="redis://localhost:6379/0",
+    broker=settings.REDIS_URL,
+    backend=settings.REDIS_URL,
     include=["app.tasks.ai_tasks"]
 )
 

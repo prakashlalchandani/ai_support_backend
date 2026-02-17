@@ -18,6 +18,7 @@ class Settings:
 
     # Database
     MONGO_URI: str = os.getenv("MONGO_URI")
+    DATABASE_NAME: str = os.getenv("DATABASE_NAME")
     REDIS_URL: str = os.getenv("REDIS_URL")
 
     # Security / Auth
@@ -29,11 +30,12 @@ class Settings:
         """Fail fast if required config is missing."""
         required = {
             "MONGO_URI": self.MONGO_URI,
+            "DATABASE_NAME": self.DATABASE_NAME,
             "REDIS_URL": self.REDIS_URL,
             "SECRET_KEY": self.SECRET_KEY,
         }
 
-        missing = [key for key, value in required.items() if not value]
+        missing = [k for k, v in required.items() if not v]
         if missing:
             raise RuntimeError(
                 f"Missing required environment variables: {', '.join(missing)}"

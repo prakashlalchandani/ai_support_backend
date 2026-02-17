@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
+from fastapi import Request
 from app.core.limiter import limiter
 from app.core.dependencies import get_current_user
 from app.services.message_service import add_message_for_ticket
@@ -11,8 +12,9 @@ logger = get_logger(__name__)
 router = APIRouter(prefix="/messages", tags=["Messages"])
 
 @router.post("/{ticket_id}")
-@limiter.limit("/")
+@limiter.limit("5/minute")
 def add_message(
+    request: Request,
     ticket_id: str,
     content: str,
     current_user=Depends(get_current_user)

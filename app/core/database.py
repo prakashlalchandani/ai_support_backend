@@ -1,27 +1,20 @@
 from pymongo import MongoClient
-from dotenv import load_dotenv
-import os
+from app.core.config import settings
 
-# load environment variables
-load_dotenv()
-
-# read values from .env
-MONGO_URI = os.getenv("MONGO_URI")
-DATABASE_NAME = os.getenv("DATABASE_NAME")
-
-
-if not MONGO_URI or not DATABASE_NAME:
-    raise ValueError("MONGO_URI OR DATABASE_NAME not set in .env file")
+"""
+Database layer should ONLY consume settings,
+never read environment variables directly.
+"""
 
 # create mongodb client
-client = MongoClient(MONGO_URI)
+client = MongoClient(settings.MONGO_URI)
 
 # get database
-db = client[DATABASE_NAME]
+db = client[settings.DATABASE_NAME]
+
 
 def get_database():
     """
     Returns MongoDB database instance.
-    Use this function to access DB across the app.
     """
     return db
